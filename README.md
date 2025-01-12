@@ -2,7 +2,7 @@
 ## Calculates expressions in vim
 
 ### Usage and setup:
-In **vim-plug**: \
+With **vim-plug**: \
 `Plug 'dcgallo15/fAlbero'` 
 
 #### Run `:EvalExpr` while being on the line you want evaluated.
