@@ -10,7 +10,9 @@ tokens = [
     'SUB',
     'MUL',
     'DIV',
-    'POW'
+    'POW',
+    'LBRAC',
+    'RBRAC'
 ]
 
 t_ADD = r'\+'
@@ -18,11 +20,13 @@ t_SUB = r'\-'
 t_MUL = r'\*'
 t_DIV = r'\/'
 t_POW = r'\^'
+t_LBRAC = r'\('
+t_RBRAC = r'\)'
 
 t_ignore = r' ' # Ignore Spaces
 
 def t_INT(t):
-    r'\d+'
+    r'-?\d+' # -? for negative integers
     t.value = int(t.value)
     return t
 
@@ -31,7 +35,7 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-precedence = (('left', 'ADD', 'SUB'), ('left', 'MUL', 'DIV'), ('left', 'POW')) # Mul and Div will go after
+precedence = (('left', 'ADD', 'SUB'), ('left', 'MUL', 'DIV'), ('left', 'POW'), ('left', 'LBRAC', 'RBRAC'))
 
 ret = 0
 
@@ -51,6 +55,10 @@ def p_expression(p):
 
     # Starting to generate syntax tree
     p[0] = (p[2], p[1], p[3])
+
+def p_expression_brac(p):
+    '''expression : LBRAC expression RBRAC '''
+    p[0] = p[2]
 
 def p_expression_int(p):
     ''' expression : INT'''
@@ -91,5 +99,5 @@ def evalExpr(line: str):
     return str(ret)
 
 if __name__ == "__main__":
-    print(evalExpr("2^5+1"))
+    print(evalExpr("(-2 / 3) ^ -1"))
 
