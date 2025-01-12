@@ -8,10 +8,16 @@ tokens = [
     'INT',
     'ADD',
     'SUB',
+    'MUL',
+    'DIV',
+    'POW'
 ]
 
 t_ADD = r'\+'
 t_SUB = r'\-'
+t_MUL = r'\*'
+t_DIV = r'\/'
+t_POW = r'\^'
 
 t_ignore = r' ' # Ignore Spaces
 
@@ -25,8 +31,7 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-# will work after more ioerators are implemented
-#precedence = (('left', 'ADD', 'SUB')) # Mul and Div will go after
+precedence = (('left', 'ADD', 'SUB'), ('left', 'MUL', 'DIV'), ('left', 'POW')) # Mul and Div will go after
 
 ret = 0
 
@@ -38,7 +43,11 @@ def p_calc(p):
 
 def p_expression(p):
     '''expression : expression ADD expression
-                | expression SUB expression'''
+                | expression SUB expression
+                | expression MUL expression
+                | expression DIV expression
+                | expression POW expression
+                '''
 
     # Starting to generate syntax tree
     p[0] = (p[2], p[1], p[3])
@@ -58,9 +67,15 @@ def p_error(p):
 def run(p):
     if type(p) == tuple:
         if p[0] == '+':
-            return p[1] + p[2]
+            return run(p[1]) + run(p[2])
         elif p[0] == '-':
-            return p[1] - p[2]
+            return run(p[1]) - run(p[2])
+        elif p[0] == '*':
+            return run(p[1]) * run(p[2])
+        elif p[0] == '/':
+            return run(p[1]) / run(p[2])
+        elif p[0] == '^':
+            return run(p[1]) ** run(p[2])
     else:
         return p
 
@@ -71,8 +86,10 @@ def evalExpr(line: str):
     lexer = lex.lex()
     parser = yacc.yacc()
     parser.parse(line)
+    if ret == None:
+        return line
     return str(ret)
 
 if __name__ == "__main__":
-    print(evalExpr("12 + 24"))
+    print(evalExpr("2^5+1"))
 
