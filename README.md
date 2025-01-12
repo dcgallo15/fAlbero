@@ -1,5 +1,5 @@
 # fAlbero
-## Calculates expressions in vim
+## Evaluates expressions in vim
 
 ### Usage and setup:
 With **vim-plug**: \
