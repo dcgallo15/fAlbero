@@ -21,7 +21,7 @@ e.g: \
 | Add             | +       |
 | Subtract        | -       |
 
-Brackets are also supported. Along with negative integers.
+Brackets are also supported, along with negative integers.
 
 ### TODO:
 - Floating point input
