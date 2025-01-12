@@ -1,6 +1,6 @@
 let s:script_dir = fnamemodify(resolve(expand('<sfile>', ':p')), ':h')
 
-function! fAlbero#HelloWorld()
+function! fAlbero#EvalExpr()
 python3 << EOF
 
 import sys
@@ -12,10 +12,7 @@ sys.path.insert(0, script_dir)
 
 import main
 
-vim.current.line = main.helloWorld(vim.current.line)
+vim.current.line = main.evalExpr(vim.current.line)
 EOF
 endfunction
 
-function! fAlbero#GetCurrentFile()
-    echo ls
-endfunction
