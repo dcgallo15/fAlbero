@@ -8,3 +8,6 @@
 ## Depends on:
 - python3
 - python3-ply
+
+## Sources:
+- https://www.dabeaz.com/ply/ply.html
