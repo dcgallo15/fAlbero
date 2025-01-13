@@ -3,6 +3,55 @@ from ply import yacc
 import sys
 
 ret = 0
+E   = 2.7182818284
+PI  = 3.1415926535
+
+# My Implementations of functions
+# TODO: ln, sin, cos, tan, sec, csc, cot, asin, acos, atan, asec, acsc, acot, sinh, cosh, tanh, asinh, acosh, atanh
+# TODO: complex numbers implementation?
+
+class Fn:
+    def ln(self, x: float) -> float:
+            print("UNDEFINED")
+            return -1.0
+
+    def sin(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def cos(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def tan(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def asin(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def acos(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def atan(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def sec(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def csc(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def cot(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+fn = Fn()
 
 tokens = [
     'FLOAT',
@@ -15,16 +64,18 @@ tokens = [
     'LBRAC',
     'RBRAC',
     'E',
-    'PI'
+    'PI',
+    'SIN'
 ]
 
-t_ADD = r'\+'
-t_SUB = r'\-'
-t_MUL = r'\*'
-t_DIV = r'\/'
-t_POW = r'\^'
+t_ADD   = r'\+'
+t_SUB   = r'\-'
+t_MUL   = r'\*'
+t_DIV   = r'\/'
+t_POW   = r'\^'
 t_LBRAC = r'\('
 t_RBRAC = r'\)'
+t_SIN   = r'sin'
 
 t_ignore = r' ' # Ignore Spaces
 
@@ -40,7 +91,7 @@ def t_PI(t):
 
 # Must check float first
 def t_FLOAT(t):
-    r'[+-]?(\d*[.])?\d+'
+    r'[+-]?(\d*[.])\d+'
     t.value = float(t.value)
     return t
 
@@ -55,12 +106,11 @@ def t_error(t):
     t.lexer.skip(1)
 
 precedence = (('left', 'E', 'PI'),
+              ('left', 'SIN'),
               ('left', 'ADD', 'SUB'),
               ('left', 'MUL', 'DIV'),
               ('left', 'POW'),
               ('left', 'LBRAC', 'RBRAC'))
-
-ret = 0
 
 def p_calc(p):
     ''' calc : expression
@@ -69,7 +119,8 @@ def p_calc(p):
     ret = run(p[1])
 
 def p_unary_expression(p):
-    pass
+    ''' expression : SIN expression '''
+    p[0] = (p[1], p[2])
 
 def p_bin_expression(p):
     '''expression : expression ADD expression
@@ -79,7 +130,7 @@ def p_bin_expression(p):
                 | expression POW expression
                 '''
 
-    # Starting to generate syntax tree
+    # Generating syntax tree
     p[0] = (p[2], p[1], p[3])
 
 def p_expression_brac(p):
@@ -116,7 +167,8 @@ def run(p):
             elif p[0] == '^':
                 return run(p[1]) ** run(p[2])
         elif len(p) == 2: # Unary Expression
-            pass
+            if p[0] == 'sin':
+                return fn.sin(run(p[1]))
     else:
         return p
 
