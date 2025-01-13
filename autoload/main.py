@@ -68,7 +68,10 @@ def p_calc(p):
     global ret
     ret = run(p[1])
 
-def p_expression(p):
+def p_unary_expression(p):
+    pass
+
+def p_bin_expression(p):
     '''expression : expression ADD expression
                 | expression SUB expression
                 | expression MUL expression
@@ -101,16 +104,19 @@ def p_error(p):
 
 def run(p):
     if type(p) == tuple:
-        if p[0] == '+':
-            return run(p[1]) + run(p[2])
-        elif p[0] == '-':
-            return run(p[1]) - run(p[2])
-        elif p[0] == '*':
-            return run(p[1]) * run(p[2])
-        elif p[0] == '/':
-            return run(p[1]) / run(p[2])
-        elif p[0] == '^':
-            return run(p[1]) ** run(p[2])
+        if len(p) == 3: # Binary Expression
+            if p[0] == '+':
+                return run(p[1]) + run(p[2])
+            elif p[0] == '-':
+                return run(p[1]) - run(p[2])
+            elif p[0] == '*':
+                return run(p[1]) * run(p[2])
+            elif p[0] == '/':
+                return run(p[1]) / run(p[2])
+            elif p[0] == '^':
+                return run(p[1]) ** run(p[2])
+        elif len(p) == 2: # Unary Expression
+            pass
     else:
         return p
 
