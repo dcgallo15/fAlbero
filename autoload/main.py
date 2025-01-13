@@ -7,25 +7,46 @@ E   = 2.7182818284
 PI  = 3.1415926535
 
 # My Implementations of functions
-# TODO: ln, sin, cos, tan, sec, csc, cot, asin, acos, atan, asec, acsc, acot, sinh, cosh, tanh, asinh, acosh, atanh
+# TODO: factorial, ln, sec, csc, cot, asin, acos, atan, asec, acsc, acot, sinh, cosh, tanh, asinh, acosh, atanh
 # TODO: complex numbers implementation?
 
+# NOTE: can maybe move to a new file?
 class Fn:
+    def factorial(self, x: int) -> int:
+        if x <= 0:
+            return 1
+        return (self.factorial(x - 1)  * x)
+
     def ln(self, x: float) -> float:
-            print("UNDEFINED")
-            return -1.0
+        if x <= 0:
+            raise Exception("Domain Error in ln function")
+        # Use approx of ln(x) : ax^(1/a) - a where a is some very large number
+        a = 10**9
+        return a*(x ** (1/a)) - a
 
     def sin(self, x: float) -> float:
-        print("UNDEFINED")
-        return -1.0
+        if x == PI or x == 2*PI:
+            return 0
+        # Converts input into 0->2*PI using periodicity of sin function
+        frac = x/(2*PI)
+        if frac > 0:
+            floor = int(frac)
+        else:
+            floor = int(frac - 0.9999999999999999)
+        x = (x - 2*PI * floor);
+        # TODO: add more terms
+        return (x - ((x ** 3) / 6) + ((x ** 5) / 120) - ((x ** 7) / 5040) +
+                ((x **9) / 362880) - ((x ** 11) / 39916800) + ((x ** 13) / 6227020800) - ((x ** 15) / 1307674368000) + ((x ** 17) / 355687428096000) -
+                ((x ** 19) / 121645100408832000) + ((x ** 21) / 51090942171709440000))
 
     def cos(self, x: float) -> float:
-        print("UNDEFINED")
-        return -1.0
+        return self.sin(x + (PI / 2))
 
     def tan(self, x: float) -> float:
-        print("UNDEFINED")
-        return -1.0
+        tmp = self.cos(x)
+        if tmp == 0:
+            raise Exception("Domain Error in tan function")
+        return (self.sin(x) / tmp)
 
     def asin(self, x: float) -> float:
         print("UNDEFINED")
@@ -65,7 +86,10 @@ tokens = [
     'RBRAC',
     'E',
     'PI',
-    'SIN'
+    'SIN',
+    'COS',
+    'TAN',
+    'LN'
 ]
 
 t_ADD   = r'\+'
@@ -76,6 +100,9 @@ t_POW   = r'\^'
 t_LBRAC = r'\('
 t_RBRAC = r'\)'
 t_SIN   = r'sin'
+t_COS   = r'cos'
+t_TAN   = r'tan'
+t_LN    = r'ln'
 
 t_ignore = r' ' # Ignore Spaces
 
@@ -106,7 +133,7 @@ def t_error(t):
     t.lexer.skip(1)
 
 precedence = (('left', 'E', 'PI'),
-              ('left', 'SIN'),
+              ('left', 'SIN', 'COS', 'TAN', 'LN'),
               ('left', 'ADD', 'SUB'),
               ('left', 'MUL', 'DIV'),
               ('left', 'POW'),
@@ -119,7 +146,10 @@ def p_calc(p):
     ret = run(p[1])
 
 def p_unary_expression(p):
-    ''' expression : SIN expression '''
+    ''' expression : SIN expression
+                    | COS expression
+                    | TAN expression
+                    | LN expression'''
     p[0] = (p[1], p[2])
 
 def p_bin_expression(p):
@@ -169,6 +199,12 @@ def run(p):
         elif len(p) == 2: # Unary Expression
             if p[0] == 'sin':
                 return fn.sin(run(p[1]))
+            elif p[0] == 'cos':
+                return fn.cos(run(p[1]))
+            elif p[0] == 'tan':
+                return fn.tan(run(p[1]))
+            elif p[0] == 'ln':
+                return fn.ln(run(p[1]))
     else:
         return p
 
