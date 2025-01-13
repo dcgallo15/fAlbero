@@ -13,7 +13,9 @@ tokens = [
     'DIV',
     'POW',
     'LBRAC',
-    'RBRAC'
+    'RBRAC',
+    'E',
+    'PI'
 ]
 
 t_ADD = r'\+'
@@ -25,6 +27,16 @@ t_LBRAC = r'\('
 t_RBRAC = r'\)'
 
 t_ignore = r' ' # Ignore Spaces
+
+def t_E(t):
+    r'E'
+    t.value = 2.7182818284
+    return t
+
+def t_PI(t):
+    r'PI'
+    t.value = 3.1415926535
+    return t
 
 # Must check float first
 def t_FLOAT(t):
@@ -42,7 +54,11 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-precedence = (('left', 'ADD', 'SUB'), ('left', 'MUL', 'DIV'), ('left', 'POW'), ('left', 'LBRAC', 'RBRAC'))
+precedence = (('left', 'E', 'PI'),
+              ('left', 'ADD', 'SUB'),
+              ('left', 'MUL', 'DIV'),
+              ('left', 'POW'),
+              ('left', 'LBRAC', 'RBRAC'))
 
 ret = 0
 
@@ -69,7 +85,9 @@ def p_expression_brac(p):
 
 def p_expression_int(p):
     ''' expression : INT
-                    | FLOAT'''
+                    | FLOAT
+                    | E
+                    | PI'''
     p[0] = p[1]
 
 def p_empty(p):
@@ -78,7 +96,7 @@ def p_empty(p):
 
 # Error rule for syntax errors
 def p_error(p):
-    print("Syntax error in input at:",)
+    print("Syntax error in input at:", end="")
     print(p)
 
 def run(p):
