@@ -5,6 +5,7 @@ import sys
 ret = 0
 
 tokens = [
+    'FLOAT',
     'INT',
     'ADD',
     'SUB',
@@ -24,6 +25,12 @@ t_LBRAC = r'\('
 t_RBRAC = r'\)'
 
 t_ignore = r' ' # Ignore Spaces
+
+# Must check float first
+def t_FLOAT(t):
+    r'[+-]?(\d*[.])?\d+'
+    t.value = float(t.value)
+    return t
 
 def t_INT(t):
     r'-?\d+' # -? for negative integers
@@ -61,7 +68,8 @@ def p_expression_brac(p):
     p[0] = p[2]
 
 def p_expression_int(p):
-    ''' expression : INT'''
+    ''' expression : INT
+                    | FLOAT'''
     p[0] = p[1]
 
 def p_empty(p):
@@ -70,7 +78,8 @@ def p_empty(p):
 
 # Error rule for syntax errors
 def p_error(p):
-    print("Syntax error in input!")
+    print("Syntax error in input at:",)
+    print(p)
 
 def run(p):
     if type(p) == tuple:
@@ -99,5 +108,5 @@ def evalExpr(line: str):
     return str(ret)
 
 if __name__ == "__main__":
-    print(evalExpr("(-2 / 3) ^ -1"))
+    print(evalExpr(input("calc: ")))
 
