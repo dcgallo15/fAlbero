@@ -28,7 +28,7 @@ tokens = [
 ]
 
 # Check before +/-, NOTE: this will not match integers with no im part, also will not match float coefficents
-# FIXME: will not work with negative real part, regex issue
+# FIXME: will not work with negative imaginary part, regex issue
 # Use: https://regex101.com/
 def t_COMPLEXNUM(t):
     #r'[-]?(\d+)*[i]'
