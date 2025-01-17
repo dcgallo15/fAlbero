@@ -9,7 +9,7 @@ fn = Fn()
 ret = 0
 
 tokens = [
-    'IMAGINARYNUM',
+    'COMPLEXNUM',
     'FLOAT',
     'INT',
     'ADD',
@@ -30,7 +30,7 @@ tokens = [
 # Check before +/-, NOTE: this will not match integers with no im part, also will not match float coefficents
 # FIXME: will not work with negative real part, regex issue
 # Use: https://regex101.com/
-def t_IMAGINARYNUM(t):
+def t_COMPLEXNUM(t):
     #r'[-]?(\d+)*[i]'
     r'(-?\d+)*([+-])*(-?\d+)*([i])' # Complex Number integer coefficents
     #print(lex.lexer.lexmatch.group(1)) # Whole expr
@@ -133,7 +133,7 @@ def p_expression_int(p):
                     | FLOAT
                     | E
                     | PI
-                    | IMAGINARYNUM'''
+                    | COMPLEXNUM'''
     p[0] = p[1]
 
 def p_empty(p):
