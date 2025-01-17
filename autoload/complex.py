@@ -1,5 +1,7 @@
-import func
+from func import Fn
 # Will need a atan function for argument of ComplexNum
+
+fn = Fn()
 
 class ComplexNum:
     def __init__(self, re: float, im: float) -> None:
@@ -7,17 +9,27 @@ class ComplexNum:
         self.im = im
 
     def __add__(self, other):
+        if isinstance(other, int) or isinstance(other, float):
+            return ComplexNum(self.re + other, self.im)
         return ComplexNum(self.re + other.re, self.im + other.im)
 
     def __sub__(self, other):
+        if isinstance(other, int) or isinstance(other, float):
+            return ComplexNum(self.re - other, self.im)
         return ComplexNum(self.re - other.re, self.im - other.im)
 
     def __mul__(self, other):
+        if isinstance(other, int) or isinstance(other, float):
+            return ComplexNum(self.re * other, self.im)
         return ComplexNum(self.re*other.re - self.im*other.im, self.im*other.re + self.re*other.im)
 
     # def __div__ (self, other) -> ComplexNum: # Does this make sense here?
 
     def __truediv__(self, other):
+        if isinstance(other, int) or isinstance(other, float):
+            if other == 0:
+                raise Exception("Cannott divide by 0!")
+            return ComplexNum(self.re / other, self.im)
         if other.re == 0 and other.im == 0:
             raise Exception("Cannot divide by 0!")
         factor = other.re**2 + other.im**2
@@ -26,10 +38,14 @@ class ComplexNum:
     # def __pow__(self, other)
 
     def __eq__(self, other) -> bool:
+        if not isinstance(other, ComplexNum):
+            return False
         return self.re == other.re and self.im == other.im
 
     def __repr__(self) -> str:
-        return str(self.re) + " + "+str(self.im)+"i"
+        if self.im == 0:
+            return str(self.re)
+        return str(self.re) + " + "+str(self.im) + "i"
 
     def mod(self):
         return ((self.re ** 2) + (self.im ** 2)) ** 0.5

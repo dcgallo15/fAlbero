@@ -27,6 +27,32 @@ tokens = [
     'LN'
 ]
 
+# Check before +/-, NOTE: this will not match integers with no im part, also will not match float coefficents
+# FIXME: will not work with negative real part, regex issue
+# Use: https://regex101.com/
+def t_IMAGINARYNUM(t):
+    #r'[-]?(\d+)*[i]'
+    r'(-?\d+)*([+-])*(-?\d+)*([i])' # Complex Number integer coefficents
+    #print(lex.lexer.lexmatch.group(1)) # Whole expr
+    print(lex.lexer.lexmatch.group(2)) # Real Part
+    print(lex.lexer.lexmatch.group(3)) # (+/-)
+    print(lex.lexer.lexmatch.group(4)) # Im Part
+    print(lex.lexer.lexmatch.group(5)) # i
+    # No real part
+    if lex.lexer.lexmatch.group(3) == None:
+        t.value = ComplexNum(0.0, float(lex.lexer.lexmatch.group(2)))
+        return t
+    if lex.lexer.lexmatch.group(4) == None: # no i coefficent
+        t.value = ComplexNum(float(lex.lexer.lexmatch.group(2)), 1.0)
+    else:
+        if lex.lexer.lexmatch.group(3) == '+':
+            t.value = ComplexNum(float(lex.lexer.lexmatch.group(2)), float(lex.lexer.lexmatch.group(4)))
+        else:
+            t.value = ComplexNum(float(lex.lexer.lexmatch.group(2)), -1.0*float(lex.lexer.lexmatch.group(4)))
+
+    #print(t.value)
+    return t
+
 t_ADD   = r'\+'
 t_SUB   = r'\-'
 t_MUL   = r'\*'
@@ -49,11 +75,6 @@ def t_E(t):
 def t_PI(t):
     r'PI'
     t.value = 3.1415926535
-    return t
-
-def t_IMAGINARYNUM(t):
-    r'[-]?(\d+)*[i]'
-    t.value = ComplexNum(0, t.value)
     return t
 
 # Must check float first
@@ -153,7 +174,7 @@ def run(p):
 # This function will change the current line in the vim editor
 # Takes in expr to calculate
 def evalExpr(line: str):
-    global ret
+    global ret, lexer, parser
     lexer = lex.lex()
     parser = yacc.yacc()
     parser.parse(line)
