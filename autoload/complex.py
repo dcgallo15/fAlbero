@@ -1,3 +1,4 @@
+import func
 # Will need a atan function for argument of ComplexNum
 
 class ComplexNum:
@@ -14,6 +15,8 @@ class ComplexNum:
     def __mul__(self, other):
         return ComplexNum(self.re*other.re - self.im*other.im, self.im*other.re + self.re*other.im)
 
+    # def __div__ (self, other) -> ComplexNum: # Does this make sense here?
+
     def __truediv__(self, other):
         if other.re == 0 and other.im == 0:
             raise Exception("Cannot divide by 0!")
@@ -28,8 +31,11 @@ class ComplexNum:
     def __repr__(self) -> str:
         return str(self.re) + " + "+str(self.im)+"i"
 
-    def abs(self):
+    def mod(self):
         return ((self.re ** 2) + (self.im ** 2)) ** 0.5
+
+    def arg(self):
+        return fn.atan(self.im / self.re)
 
 if __name__ == "__main__":
     a = ComplexNum(1, 2)
