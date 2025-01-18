@@ -58,3 +58,4 @@ Trig functions take input in radians.
 
 ### Sources:
 - https://www.dabeaz.com/ply/ply.html
+- https://regex101.com/
