@@ -27,30 +27,34 @@ tokens = [
     'LN'
 ]
 
-# Check before +/-, NOTE: this will not match integers with no im part, also will not match float coefficents
-# FIXME: will not work with negative imaginary part, regex issue
+# NOTE: this will not match integers with no im part, also will not match float coefficents
 # Use: https://regex101.com/
 def t_COMPLEXNUM(t):
-    #r'[-]?(\d+)*[i]'
-    r'(-?\d+)*([+-])*(-?\d+)*([i])' # Complex Number integer coefficents
-    #print(lex.lexer.lexmatch.group(1)) # Whole expr
-    print(lex.lexer.lexmatch.group(2)) # Real Part
-    print(lex.lexer.lexmatch.group(3)) # (+/-)
-    print(lex.lexer.lexmatch.group(4)) # Im Part
-    print(lex.lexer.lexmatch.group(5)) # i
-    # No real part
-    if lex.lexer.lexmatch.group(3) == None:
-        t.value = ComplexNum(0.0, float(lex.lexer.lexmatch.group(2)))
-        return t
-    if lex.lexer.lexmatch.group(4) == None: # no i coefficent
-        t.value = ComplexNum(float(lex.lexer.lexmatch.group(2)), 1.0)
-    else:
-        if lex.lexer.lexmatch.group(3) == '+':
-            t.value = ComplexNum(float(lex.lexer.lexmatch.group(2)), float(lex.lexer.lexmatch.group(4)))
-        else:
-            t.value = ComplexNum(float(lex.lexer.lexmatch.group(2)), -1.0*float(lex.lexer.lexmatch.group(4)))
+    r'([-+])*(\d+)*([-+])*(-?\d+)*([i])' # Complex Number integer coefficents
 
-    #print(t.value)
+    #print(lex.lexer.lexmatch.group(1)) # Whole expr
+    #print(lex.lexer.lexmatch.group(2)) # (+/-)
+    #print(lex.lexer.lexmatch.group(3)) # Real Part
+    #print(lex.lexer.lexmatch.group(4)) # (+/-)
+    #print(lex.lexer.lexmatch.group(5)) # Im Part
+    #print(lex.lexer.lexmatch.group(6)) # i
+
+    # Set Real
+    re = 0.0
+    if lex.lexer.lexmatch.group(4) != None:
+        re = float(lex.lexer.lexmatch.group(3))
+        if lex.lexer.lexmatch.group(2) == '-':
+            re = -1.0*re
+    # Set Im
+    im = 0
+    if lex.lexer.lexmatch.group(5) == None: # no i coefficent
+        im = 1.0
+    else:
+        im = float(lex.lexer.lexmatch.group(5))
+        if lex.lexer.lexmatch.group(4) == '-':
+            im = -1.0*im
+
+    t.value = ComplexNum(re, im)
     return t
 
 t_ADD   = r'\+'
