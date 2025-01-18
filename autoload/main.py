@@ -27,10 +27,14 @@ tokens = [
     'LN'
 ]
 
+def toComplex(x):
+    return ComplexNum(x, 0)
+
 # NOTE: this will not match integers with no im part, also will not match float coefficents
 # Use: https://regex101.com/
 def t_COMPLEXNUM(t):
-    r'([-+])*(\d+)*([-+])*(-?\d+)*([i])' # Complex Number integer coefficents
+    #r'([-+])*(\d+)*([-+])*(-?\d+)*([i])' # Complex Number integer coefficents
+    r'([-+])*(\d*[.]?\d+)*([-+])*(\d*[.]?\d+)*([i])' # Complex Number floating point coefficents
 
     #print(lex.lexer.lexmatch.group(1)) # Whole expr
     #print(lex.lexer.lexmatch.group(2)) # (+/-)
@@ -48,7 +52,15 @@ def t_COMPLEXNUM(t):
     # Set Im
     im = 0
     if lex.lexer.lexmatch.group(5) == None: # no i coefficent
-        im = 1.0
+        if lex.lexer.lexmatch.group(4) == None: # If no real part
+            if lex.lexer.lexmatch.group(3) == None:
+                im = 1.0
+            else:
+                im = float(lex.lexer.lexmatch.group(3))
+                if lex.lexer.lexmatch.group(2) == '-':
+                    im = -1.0*im
+        else:
+            im = 1.0
     else:
         im = float(lex.lexer.lexmatch.group(5))
         if lex.lexer.lexmatch.group(4) == '-':
@@ -99,7 +111,7 @@ def t_error(t):
 
 precedence = (('left', 'E', 'PI'),
               ('left', 'SIN', 'COS', 'TAN', 'LN'),
-              ('left', 'ADD', 'SUB'),
+              ('left', 'ADD', 'SUB', 'COMPLEXNUM'),
               ('left', 'MUL', 'DIV'),
               ('left', 'POW'),
               ('left', 'LBRAC', 'RBRAC'))
@@ -149,19 +161,37 @@ def p_error(p):
     print("Syntax error in input at:", end="")
     print(p)
 
+# Here need to check types to ensure int/floats are not composed with complex numbers
 def run(p):
     global fn
     if type(p) == tuple:
         if len(p) == 3: # Binary Expression
             if p[0] == '+':
-                return run(p[1]) + run(p[2])
+                tmp = run(p[2])
+                if isinstance(tmp, ComplexNum):
+                    return toComplex(run(p[1])) + tmp
+                else:
+                    return run(p[1]) + tmp
             elif p[0] == '-':
-                return run(p[1]) - run(p[2])
+                tmp = run(p[2])
+                if isinstance(tmp, ComplexNum):
+                    return toComplex(run(p[1])) - tmp
+                else:
+                    return run(p[1]) - tmp
             elif p[0] == '*':
-                return run(p[1]) * run(p[2])
+                tmp = run(p[2])
+                if isinstance(tmp, ComplexNum):
+                    return toComplex(run(p[1])) * tmp
+                else:
+                    return run(p[1]) * tmp
             elif p[0] == '/':
-                return run(p[1]) / run(p[2])
+                tmp = run(p[2])
+                if isinstance(tmp, ComplexNum):
+                  return toComplex(run(p[1])) / tmp
+                else:
+                    return run(p[1]) / tmp
             elif p[0] == '^':
+                # TODO: Implement complex^complex
                 return run(p[1]) ** run(p[2])
         elif len(p) == 2: # Unary Expression
             if p[0] == 'sin':
