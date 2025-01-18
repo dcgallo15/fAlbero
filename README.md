@@ -2,6 +2,8 @@
 ## Evaluates calculation expressions in vim
 
 ### Usage and setup:
+Run `sudo apt install python3` and `sudo apt install python3-ply` to install dependencies.
+
 With **vim-plug**: \
 `Plug 'dcgallo15/fAlbero'` 
 
