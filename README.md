@@ -39,9 +39,12 @@ Brackets are also supported, along with negative integers. \
 
 | Operator        | Symbol  |
 | --------        | ------- |
-| sin             | sin     | 
-| cos             | cos     |
-| tan             | tan     |
+| sine            | sin     | 
+| cossine         | cos     |
+| tangent         | tan     |
+| secant          | sec     | 
+| cosecant        | csc     |
+| cotanangent     | cot     |
 | ln (log base e) | ln      |
 
 Trig functions take input in radians.
