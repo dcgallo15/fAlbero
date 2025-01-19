@@ -1,6 +1,5 @@
 from ply import lex
 from ply import yacc
-from math import atan
 from complex import *
 from func import Fn
 
@@ -109,7 +108,7 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-precedence = (('left', 'E', 'PI'),
+precedence = (('left', 'E', 'INT', 'FLOAT', 'PI'),
               ('left', 'SIN', 'COS', 'TAN', 'LN'),
               ('left', 'ADD', 'SUB', 'COMPLEXNUM'),
               ('left', 'MUL', 'DIV'),
@@ -144,13 +143,31 @@ def p_expression_brac(p):
     '''expression : LBRAC expression RBRAC '''
     p[0] = p[2]
 
-def p_expression_int(p):
+def p_expression_num(p):
     ''' expression : INT
                     | FLOAT
                     | E
                     | PI
                     | COMPLEXNUM'''
     p[0] = p[1]
+
+# To correct for 10-10
+def p_expression_num_num(p):
+    ''' expression : INT INT
+                     | FLOAT FLOAT
+                     | COMPLEXNUM COMPLEXNUM
+                     | E E
+                     | PI PI'''
+    if isinstance(p[2], ComplexNum):
+        if p[2].re < 0:
+            p[0] = p[1] + p[2]
+        else:
+            p_error(p[0])
+    else:
+        if p[2] < 0:
+            p[0] = p[1] + p[2]
+        else:
+            p_error(p[0])
 
 def p_empty(p):
     ''' empty :'''
