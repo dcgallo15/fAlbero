@@ -40,7 +40,7 @@ Brackets are also supported, along with negative integers. \
 | Operator        | Symbol  |
 | --------        | ------- |
 | sine            | sin     | 
-| cossine         | cos     |
+| cosine          | cos     |
 | tangent         | tan     |
 | secant          | sec     | 
 | cosecant        | csc     |
