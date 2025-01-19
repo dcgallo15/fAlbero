@@ -44,7 +44,7 @@ Brackets are also supported, along with negative integers. \
 | tangent         | tan     |
 | secant          | sec     | 
 | cosecant        | csc     |
-| cotanangent     | cot     |
+| cotangent       | cot     |
 | ln (log base e) | ln      |
 
 Trig functions take input in radians.
