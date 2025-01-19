@@ -23,6 +23,9 @@ tokens = [
     'SIN',
     'COS',
     'TAN',
+    'SEC',
+    'CSC',
+    'COT',
     'LN'
 ]
 
@@ -78,6 +81,9 @@ t_RBRAC = r'\)'
 t_SIN   = r'sin'
 t_COS   = r'cos'
 t_TAN   = r'tan'
+t_SEC   = r'sec'
+t_CSC   = r'csc'
+t_COT   = r'cot'
 t_LN    = r'ln'
 
 t_ignore = r' ' # Ignore Spaces
@@ -125,6 +131,9 @@ def p_unary_expression(p):
     ''' expression : SIN expression
                     | COS expression
                     | TAN expression
+                    | SEC expression
+                    | CSC expression
+                    | COT expression
                     | LN expression'''
     p[0] = (p[1], p[2])
 
@@ -217,6 +226,12 @@ def run(p):
                 return fn.cos(run(p[1]))
             elif p[0] == 'tan':
                 return fn.tan(run(p[1]))
+            elif p[0] == 'sec':
+                return fn.sec(run(p[1]))
+            elif p[0] == 'csc':
+                return fn.csc(run(p[1]))
+            elif p[0] == 'cot':
+                return fn.cot(run(p[1]))
             elif p[0] == 'ln':
                 return fn.ln(run(p[1]))
     else:

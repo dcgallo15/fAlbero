@@ -57,17 +57,80 @@ class Fn:
         return atan(x)
 
     def sec(self, x: float) -> float:
-        print("UNDEFINED")
-        return -1.0
+        tmp = self.cos(x)
+        if tmp == 0:
+            raise Exception("Domain Error in sec function")
+        return (1/tmp)
 
     def csc(self, x: float) -> float:
-        print("UNDEFINED")
-        return -1.0
+        tmp = self.sin(x)
+        if tmp == 0:
+            raise Exception("Domain Error in cosec function")
+        return (1/tmp)
 
     def cot(self, x: float) -> float:
+        tmp = self.tan(x)
+        if tmp == 0:
+            raise Exception("Domain Error in cot function")
+        return (1/tmp)
+
+    def asec(self, x: float) -> float:
         print("UNDEFINED")
         return -1.0
 
-fn = Fn()
+    def acsc(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
 
+    def acot(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def sinh(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def cosh(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def tanh(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def sech(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def csch(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def coth(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def asinh(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def acosh(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def atanh(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def asech(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def acsch(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
+
+    def acoth(self, x: float) -> float:
+        print("UNDEFINED")
+        return -1.0
 
