@@ -46,10 +46,16 @@ class Fn:
         return (self.sin(x) / tmp)
 
     def asin(self, x: float) -> float:
+        if x < -1 or x > 1:
+            raise Exception("Domain Error in asin function")
+
         print("UNDEFINED")
         return -1.0
 
     def acos(self, x: float) -> float:
+        if x < -1 or x > 1:
+            raise Exception("Domain Error in acos function")
+
         print("UNDEFINED")
         return -1.0
 

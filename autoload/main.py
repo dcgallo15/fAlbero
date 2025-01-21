@@ -30,6 +30,8 @@ tokens = [
 ]
 
 def toComplex(x):
+    if isinstance(x, ComplexNum):
+        return x
     return ComplexNum(x, 0)
 
 # NOTE: this will not match integers with no im part, also will not match float coefficents
