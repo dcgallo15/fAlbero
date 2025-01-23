@@ -40,7 +40,7 @@ apart from exponentiation and unary operations **yet**.
 | Add             | +       |
 | Subtract        | -       |
 
-Brackets are also supported, along with negative integers. \
+Brackets are also supported, along with negative integers.
 
 #### Unary Operations
 
